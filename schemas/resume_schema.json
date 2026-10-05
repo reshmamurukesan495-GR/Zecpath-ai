@@ -1,0 +1,13 @@
+{
+    "Candidate":{
+        "Candidate_id":"",
+        "name":"",
+        "email":"",
+        "phone":"",
+        "location":"",
+        "skills":[],
+        "education":[],
+        "experience":[],
+        "certification":[]
+    }
+}

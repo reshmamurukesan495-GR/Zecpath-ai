@@ -1,0 +1,13 @@
+{
+    "job":{
+        "job_title":"",
+        "department":"",
+        "location":"",
+        "employment_type":"",
+        "required_skills":[],
+        "preferred_skills":[],
+        "experience_required":"",
+        "education_required":"",
+        "certifications":[]
+    }
+}
