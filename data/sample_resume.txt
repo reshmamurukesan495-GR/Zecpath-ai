@@ -1,0 +1,27 @@
+JOHN JACOB
+
+Data Scientist
+
+Email: john.jacob@email.com
+Phone: 9876543210
+Location: Bangalore
+
+SKILLS
+Python
+SQL
+Power BI
+Machine Learning
+Pandas
+NumPy
+
+EDUCATION
+MSc Data Science
+ABC University
+
+EXPERIENCE
+Data Science Intern
+XYZ Technologies
+2024 - 2025
+
+Worked on data analysis and machine learning projects.
+Created Power BI dashboards.
