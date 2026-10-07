@@ -1,0 +1,25 @@
+JOB TITLE: Data Scientist
+
+ROLE: Data Scientist
+
+We are looking for a Data Scientist to join our AI team.
+
+REQUIRED SKILLS:
+Python
+SQL
+Machine Learning
+Power BI
+Pandas
+NumPy
+
+EXPERIENCE:
+2 years of experience in data science or machine learning.
+
+EDUCATION:
+MSc in Data Science, MSc Computer Science, or BTech.
+
+RESPONSIBILITIES:
+- Analyze business data.
+- Build machine learning models.
+- Create Power BI dashboards.
+- Work with the data engineering team.

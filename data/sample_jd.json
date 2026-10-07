@@ -1,0 +1,17 @@
+{
+   
+    "role": "Data Scientist",
+    "required_skills": [
+        "Python", 
+        "SQL",
+        "Machine Learning", 
+        "Power BI",
+        "Pandas", 
+        "NumPy"
+
+    ], 
+    "experience_required": " 2 years of experience in data science or machine learning.",
+
+    "education_required": "MSc in Data Science, MSc Computer Science, or BTech."
+
+}
