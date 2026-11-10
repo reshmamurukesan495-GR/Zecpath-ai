@@ -1,44 +1,175 @@
-from utils.logger import logger
-from skill_extraction.skill_extractor import extract_skills
+# Day 13 - ATS Scoring Engine
+
+# 1. Default Weight Configuration
+
+DEFAULT_WEIGHTS = {
+    "skills": 0.35,
+    "experience": 0.25,
+    "education": 0.15,
+    "semantic": 0.25
+}
 
 
-def calculate_ats_score(candidate, job, resume_text=None):
-    logger.info("ATS scoring started")
+# 2. Role-Based Weight Configuration
 
-    score = 0
+ROLE_WEIGHTS = {
 
-    # Extract skills from resume text if provided
-    if resume_text:
-       extracted_skills = extract_skills(resume_text)
-       candidate_skills_list = []
-       for category_skills in extracted_skills.values():
-        candidate_skills_list.extend(category_skills)
-        candidate_skills = {
-        skill.lower() for skill in candidate_skills_list
+    "backend developer": {
+        "skills": 0.40,
+        "experience": 0.30,
+        "education": 0.10,
+        "semantic": 0.20
+    },
+
+    "data scientist": {
+        "skills": 0.35,
+        "experience": 0.25,
+        "education": 0.20,
+        "semantic": 0.20
+    },
+
+    "marketing executive": {
+        "skills": 0.30,
+        "experience": 0.30,
+        "education": 0.15,
+        "semantic": 0.25
     }
-    else:
-     candidate_skills = {
-        skill.lower()
-        for skill in candidate.get("skills", [])
+}
+
+
+# 3. Normalize Score (0-100 to 0-1)
+
+def normalize(score):
+
+    if score is None:
+        return 0
+
+    return max(0, min(float(score), 100)) / 100
+
+
+# 4. Handle Missing Data
+
+def safe_score(value):
+
+    return value if value is not None else 0
+
+
+# 5. Get Dynamic Weights
+
+def get_weights(job_role):
+
+    role = job_role.lower().strip()
+
+    return ROLE_WEIGHTS.get(
+        role,
+        DEFAULT_WEIGHTS
+    )
+
+
+# 6. Calculate ATS Score
+
+def calculate_ats_score(
+    candidate,
+    job,
+    weights=DEFAULT_WEIGHTS
+):
+
+    skill_score = normalize(
+        safe_score(candidate.get("skill_score"))
+    )
+
+    exp_score = normalize(
+        safe_score(candidate.get("experience_score"))
+    )
+
+    edu_score = normalize(
+        safe_score(candidate.get("education_score"))
+    )
+
+    semantic_score = normalize(
+        safe_score(candidate.get("semantic_score"))
+    )
+
+    final_score = (
+
+        weights["skills"] * skill_score +
+
+        weights["experience"] * exp_score +
+
+        weights["education"] * edu_score +
+
+        weights["semantic"] * semantic_score
+
+    )
+
+    return round(final_score * 100, 2)
+
+
+# 7. Candidate Score Generator
+
+def generate_candidate_score(candidate, job):
+
+    weights = get_weights(
+        job.get("job_title", "")
+    )
+
+    final_score = calculate_ats_score(
+        candidate,
+        job,
+        weights
+    )
+
+    return {
+
+        "candidate_id": candidate.get("candidate_id"),
+
+        "final_score": final_score,
+
+        "weights_used": weights,
+
+        "breakdown": {
+
+            "skill_score": safe_score(
+                candidate.get("skill_score")
+            ),
+
+            "experience_score": safe_score(
+                candidate.get("experience_score")
+            ),
+
+            "education_score": safe_score(
+                candidate.get("education_score")
+            ),
+
+            "semantic_score": safe_score(
+                candidate.get("semantic_score")
+            )
+        }
     }
 
-    job_skills = {
-        skill.lower()
-        for skill in job.get("skills", [])
-    }
 
-    if job_skills:
-        matched_skills = candidate_skills.intersection(job_skills)
-        score += (len(matched_skills) / len(job_skills)) * 50
+# 8. Safe ATS Calculation
 
-    # Experience score
-    if candidate.get("experience"):
-        score += 30
+def calculate_safe_ats(candidate, job):
 
-    # Education score
-    if candidate.get("education"):
-        score += 20
+    candidate["skill_score"] = safe_score(
+        candidate.get("skill_score")
+    )
 
-    logger.info("ATS scoring completed")
-    
-    return round(score, 2)
+    candidate["experience_score"] = safe_score(
+        candidate.get("experience_score")
+    )
+
+    candidate["education_score"] = safe_score(
+        candidate.get("education_score")
+    )
+
+    candidate["semantic_score"] = safe_score(
+        candidate.get("semantic_score")
+    )
+
+    return generate_candidate_score(
+        candidate,
+        job
+    )
+
